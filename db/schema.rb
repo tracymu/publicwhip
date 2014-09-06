@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20140905062045) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
     t.integer  "attempts",   default: 0, null: false
@@ -38,7 +41,7 @@ ActiveRecord::Schema.define(version: 20140905062045) do
     t.integer "aye_majority",     null: false
   end
 
-  add_index "division_infos", ["division_id"], name: "division_id", using: :btree
+  add_index "division_infos", ["division_id"], name: "division_info_division_id", using: :btree
 
   create_table "divisions", force: true do |t|
     t.boolean "valid"
@@ -55,12 +58,13 @@ ActiveRecord::Schema.define(version: 20140905062045) do
     t.text    "debate_gid",           null: false
   end
 
-  add_index "divisions", ["date", "number", "house"], name: "division_date_2", unique: true, using: :btree
+  add_index "divisions", ["date", "number", "house"], name: "division_date_number_house", unique: true, using: :btree
   add_index "divisions", ["date"], name: "division_date", using: :btree
-  add_index "divisions", ["house"], name: "house", using: :btree
+  add_index "divisions", ["house"], name: "division_house", using: :btree
   add_index "divisions", ["number"], name: "division_number", using: :btree
 
-  create_table "electorates", force: true do |t|
+  create_table "electorates", id: false, force: true do |t|
+    t.integer "id",                                           null: false
     t.string  "name",      limit: 100,                        null: false
     t.boolean "main_name",                                    null: false
     t.date    "from_date",             default: '1000-01-01', null: false
@@ -74,13 +78,13 @@ ActiveRecord::Schema.define(version: 20140905062045) do
   add_index "electorates", ["to_date"], name: "to_date", using: :btree
 
   create_table "member_distances", force: true do |t|
-    t.integer "member1_id",              null: false
-    t.integer "member2_id",              null: false
+    t.integer "member1_id",   null: false
+    t.integer "member2_id",   null: false
     t.integer "nvotessame"
     t.integer "nvotesdiffer"
     t.integer "nvotesabsent"
-    t.float   "distance_a",   limit: 24
-    t.float   "distance_b",   limit: 24
+    t.float   "distance_a"
+    t.float   "distance_b"
   end
 
   add_index "member_distances", ["member1_id", "member2_id"], name: "mp_id1_2", unique: true, using: :btree
@@ -96,7 +100,7 @@ ActiveRecord::Schema.define(version: 20140905062045) do
     t.integer "aye_majority",   null: false
   end
 
-  add_index "member_infos", ["member_id"], name: "mp_id", using: :btree
+  add_index "member_infos", ["member_id"], name: "member_info_mp_id", using: :btree
 
   create_table "members", force: true do |t|
     t.string  "gid",            limit: 100,                        null: false
@@ -114,12 +118,12 @@ ActiveRecord::Schema.define(version: 20140905062045) do
     t.integer "person_id"
   end
 
-  add_index "members", ["entered_house"], name: "entered_house", using: :btree
-  add_index "members", ["gid"], name: "gid", using: :btree
-  add_index "members", ["house"], name: "house", using: :btree
-  add_index "members", ["left_house"], name: "left_house", using: :btree
-  add_index "members", ["party"], name: "party", using: :btree
-  add_index "members", ["person_id"], name: "person", using: :btree
+  add_index "members", ["entered_house"], name: "members_entered_house", using: :btree
+  add_index "members", ["gid"], name: "members_gid", using: :btree
+  add_index "members", ["house"], name: "members_house", using: :btree
+  add_index "members", ["left_house"], name: "members_left_house", using: :btree
+  add_index "members", ["party"], name: "members_party", using: :btree
+  add_index "members", ["person_id"], name: "members_person", using: :btree
   add_index "members", ["title", "first_name", "last_name", "constituency", "entered_house", "left_house", "house"], name: "title", unique: true, using: :btree
 
   create_table "offices", force: true do |t|
@@ -131,16 +135,16 @@ ActiveRecord::Schema.define(version: 20140905062045) do
     t.integer "person_id"
   end
 
-  add_index "offices", ["person_id"], name: "person", using: :btree
+  add_index "offices", ["person_id"], name: "office_person", using: :btree
 
   create_table "policies", force: true do |t|
     t.string  "name",        limit: 100, null: false
     t.integer "user_id",                 null: false
     t.binary  "description",             null: false
-    t.integer "private",     limit: 1,   null: false
+    t.integer "private",     limit: 2,   null: false
   end
 
-  add_index "policies", ["id", "name", "user_id"], name: "dream_id", unique: true, using: :btree
+  add_index "policies", ["id", "name", "user_id"], name: "policies_dream_id_name_user_id", unique: true, using: :btree
   add_index "policies", ["user_id"], name: "user_id", using: :btree
 
   create_table "policy_divisions", force: true do |t|
@@ -151,19 +155,19 @@ ActiveRecord::Schema.define(version: 20140905062045) do
 
   add_index "policy_divisions", ["division_id", "policy_id"], name: "index_policy_divisions_on_division_id_and_policy_id", unique: true, using: :btree
   add_index "policy_divisions", ["division_id"], name: "index_policy_divisions_on_division_id", using: :btree
-  add_index "policy_divisions", ["policy_id"], name: "dream_id", using: :btree
+  add_index "policy_divisions", ["policy_id"], name: "policies_dream_id", using: :btree
 
   create_table "policy_person_distances", force: true do |t|
-    t.integer "policy_id",                     null: false
-    t.integer "person_id",                     null: false
+    t.integer "policy_id",          null: false
+    t.integer "person_id",          null: false
     t.integer "nvotessame"
     t.integer "nvotessamestrong"
     t.integer "nvotesdiffer"
     t.integer "nvotesdifferstrong"
     t.integer "nvotesabsent"
     t.integer "nvotesabsentstrong"
-    t.float   "distance_a",         limit: 24
-    t.float   "distance_b",         limit: 24
+    t.float   "distance_a"
+    t.float   "distance_b"
   end
 
   add_index "policy_person_distances", ["person_id"], name: "person", using: :btree
@@ -205,9 +209,8 @@ ActiveRecord::Schema.define(version: 20140905062045) do
     t.boolean "teller",                 default: false, null: false
   end
 
-  add_index "votes", ["division_id", "member_id"], name: "division_id_2", unique: true, using: :btree
-  add_index "votes", ["division_id"], name: "division_id", using: :btree
-  add_index "votes", ["member_id"], name: "mp_id", using: :btree
+  add_index "votes", ["division_id"], name: "vote_division_id", using: :btree
+  add_index "votes", ["member_id"], name: "vote_mp_id", using: :btree
   add_index "votes", ["teller"], name: "index_votes_on_teller", using: :btree
   add_index "votes", ["vote"], name: "index_votes_on_vote", using: :btree
 
@@ -224,7 +227,7 @@ ActiveRecord::Schema.define(version: 20140905062045) do
     t.string  "whip_guess",       limit: 10,  null: false
   end
 
-  add_index "whips", ["division_id", "party"], name: "division_id", unique: true, using: :btree
+  add_index "whips", ["division_id", "party"], name: "whips_division_id", unique: true, using: :btree
 
   create_table "wiki_motions", force: true do |t|
     t.text     "text_body",   null: false

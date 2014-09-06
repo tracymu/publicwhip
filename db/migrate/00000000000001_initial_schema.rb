@@ -31,7 +31,7 @@ class InitialSchema < ActiveRecord::Migration
       t.integer "aye_majority",     null: false
     end
 
-    add_index "pw_cache_divinfo", ["division_id"], name: "division_id", using: :btree
+    add_index "pw_cache_divinfo", ["division_id"], name: "division_info_division_id", using: :btree
 
     create_table "pw_cache_divwiki", id: false, force: true do |t|
       t.date    "division_date",             null: false
@@ -40,7 +40,7 @@ class InitialSchema < ActiveRecord::Migration
       t.integer "wiki_id",                   null: false
     end
 
-    add_index "pw_cache_divwiki", ["division_date", "division_number", "house"], name: "division_date", unique: true, using: :btree
+    add_index "pw_cache_divwiki", ["division_date", "division_number", "house"], name: "pw_cache_divwiki_date_number_house", unique: true, using: :btree
 
     create_table "pw_cache_dreaminfo", primary_key: "dream_id", force: true do |t|
       t.integer "cache_uptodate",                  null: false
@@ -75,7 +75,7 @@ class InitialSchema < ActiveRecord::Migration
       t.integer "aye_majority",   null: false
     end
 
-    add_index "pw_cache_mpinfo", ["mp_id"], name: "mp_id", using: :btree
+    add_index "pw_cache_mpinfo", ["mp_id"], name: "member_info_mp_id", using: :btree
 
     create_table "pw_cache_partyinfo", id: false, force: true do |t|
       t.string  "party",       limit: 100, null: false
@@ -103,7 +103,7 @@ class InitialSchema < ActiveRecord::Migration
       t.integer "rebel_outof", null: false
     end
 
-    add_index "pw_cache_rebelrank_today", ["mp_id"], name: "mp_id", using: :btree
+    add_index "pw_cache_rebelrank_today", ["mp_id"], name: "pw_cache_rebelrank_today_mp_id", using: :btree
 
     create_table "pw_cache_whip", id: false, force: true do |t|
       t.integer "division_id",                  null: false
@@ -118,7 +118,7 @@ class InitialSchema < ActiveRecord::Migration
       t.string  "whip_guess",       limit: 10,  null: false
     end
 
-    add_index "pw_cache_whip", ["division_id", "party"], name: "division_id", unique: true, using: :btree
+    add_index "pw_cache_whip", ["division_id", "party"], name: "whips_division_id", unique: true, using: :btree
 
     create_table "pw_candidate", primary_key: "candidate_id", force: true do |t|
       t.string "first_name",       limit: 100,                        null: false
@@ -167,10 +167,10 @@ class InitialSchema < ActiveRecord::Migration
       t.text    "debate_gid",                null: false
     end
 
-    add_index "pw_division", ["division_date", "division_number", "house"], name: "division_date_2", unique: true, using: :btree
+    add_index "pw_division", ["division_date", "division_number", "house"], name: "division_date_number_house", unique: true, using: :btree
     add_index "pw_division", ["division_date"], name: "division_date", using: :btree
     add_index "pw_division", ["division_number"], name: "division_number", using: :btree
-    add_index "pw_division", ["house"], name: "house", using: :btree
+    add_index "pw_division", ["house"], name: "division_house", using: :btree
 
     create_table "pw_dyn_aggregate_dreammp", id: false, force: true do |t|
       t.integer "dream_id_agg",            null: false
@@ -196,7 +196,7 @@ class InitialSchema < ActiveRecord::Migration
       t.integer "private",     limit: 1,   null: false
     end
 
-    add_index "pw_dyn_dreammp", ["dream_id", "name", "user_id"], name: "dream_id", unique: true, using: :btree
+    add_index "pw_dyn_dreammp", ["dream_id", "name", "user_id"], name: "policies_dream_id_name_user_id", unique: true, using: :btree
     add_index "pw_dyn_dreammp", ["user_id"], name: "user_id", using: :btree
 
     create_table "pw_dyn_dreamvote", id: false, force: true do |t|
@@ -207,10 +207,10 @@ class InitialSchema < ActiveRecord::Migration
       t.string  "vote",            limit: 10, null: false
     end
 
-    add_index "pw_dyn_dreamvote", ["division_date", "division_number", "house", "dream_id"], name: "division_date_2", unique: true, using: :btree
-    add_index "pw_dyn_dreamvote", ["division_date"], name: "division_date", using: :btree
-    add_index "pw_dyn_dreamvote", ["division_number"], name: "division_number", using: :btree
-    add_index "pw_dyn_dreamvote", ["dream_id"], name: "dream_id", using: :btree
+    add_index "pw_dyn_dreamvote", ["division_date", "division_number", "house", "dream_id"], name: "policies_date_number_house_dream_id", unique: true, using: :btree
+    add_index "pw_dyn_dreamvote", ["division_date"], name: "policies_division_date", using: :btree
+    add_index "pw_dyn_dreamvote", ["division_number"], name: "policies_division_number", using: :btree
+    add_index "pw_dyn_dreamvote", ["dream_id"], name: "policies_dream_id", using: :btree
 
     create_table "pw_dyn_newsletter", primary_key: "newsletter_id", force: true do |t|
       t.string   "email"
@@ -250,7 +250,7 @@ class InitialSchema < ActiveRecord::Migration
       t.datetime "edit_date"
     end
 
-    add_index "pw_dyn_wiki_motion", ["division_date", "division_number", "house"], name: "division_date", using: :btree
+    add_index "pw_dyn_wiki_motion", ["division_date", "division_number", "house"], name: "wiki_motions_division_date_number_house", using: :btree
 
     create_table "pw_logincoming", id: false, force: true do |t|
       t.string   "referrer", limit: 120
@@ -274,7 +274,7 @@ class InitialSchema < ActiveRecord::Migration
       t.integer "person"
     end
 
-    add_index "pw_moffice", ["person"], name: "person", using: :btree
+    add_index "pw_moffice", ["person"], name: "office_person", using: :btree
 
     create_table "pw_mp", primary_key: "mp_id", force: true do |t|
       t.string  "gid",            limit: 100,                        null: false
@@ -292,12 +292,12 @@ class InitialSchema < ActiveRecord::Migration
       t.integer "person"
     end
 
-    add_index "pw_mp", ["entered_house"], name: "entered_house", using: :btree
-    add_index "pw_mp", ["gid"], name: "gid", using: :btree
-    add_index "pw_mp", ["house"], name: "house", using: :btree
-    add_index "pw_mp", ["left_house"], name: "left_house", using: :btree
-    add_index "pw_mp", ["party"], name: "party", using: :btree
-    add_index "pw_mp", ["person"], name: "person", using: :btree
+    add_index "pw_mp", ["entered_house"], name: "members_entered_house", using: :btree
+    add_index "pw_mp", ["gid"], name: "members_gid", using: :btree
+    add_index "pw_mp", ["house"], name: "members_house", using: :btree
+    add_index "pw_mp", ["left_house"], name: "members_left_house", using: :btree
+    add_index "pw_mp", ["party"], name: "members_party", using: :btree
+    add_index "pw_mp", ["person"], name: "members_person", using: :btree
     add_index "pw_mp", ["title", "first_name", "last_name", "constituency", "entered_house", "left_house", "house"], name: "title", unique: true, using: :btree
 
     create_table "pw_vote", id: false, force: true do |t|
@@ -306,10 +306,10 @@ class InitialSchema < ActiveRecord::Migration
       t.string  "vote",        limit: 10, null: false
     end
 
-    add_index "pw_vote", ["division_id", "mp_id", "vote"], name: "division_id_2", unique: true, using: :btree
-    add_index "pw_vote", ["division_id"], name: "division_id", using: :btree
-    add_index "pw_vote", ["mp_id"], name: "mp_id", using: :btree
-    add_index "pw_vote", ["vote"], name: "vote", using: :btree
+    add_index "pw_vote", ["division_id", "mp_id", "vote"], name: "vote_division_id_mp_id_vote", unique: true, using: :btree
+    add_index "pw_vote", ["division_id"], name: "vote_division_id", using: :btree
+    add_index "pw_vote", ["mp_id"], name: "vote_mp_id", using: :btree
+    add_index "pw_vote", ["vote"], name: "vote_vote", using: :btree
 
     create_table "pw_vote_sortorder", id: false, force: true do |t|
       t.string  "vote",     limit: 10, null: false

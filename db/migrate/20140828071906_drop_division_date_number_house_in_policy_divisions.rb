@@ -1,6 +1,6 @@
 class DropDivisionDateNumberHouseInPolicyDivisions < ActiveRecord::Migration
   def change
-    remove_index :policy_divisions, name: "division_date_2"
+    remove_index :policy_divisions, name: "policies_date_number_house_dream_id"
     add_index :policy_divisions, [:division_id, :policy_id], unique: true
     add_index :policy_divisions, :division_id
     remove_column :policy_divisions, :division_date, :date, null: false
