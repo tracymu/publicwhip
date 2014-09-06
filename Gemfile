@@ -44,6 +44,7 @@ gem 'mechanize' # Used to download debates
 gem 'nokogiri' # Explicitly included as it's used directly when testing division loader
 gem 'seed_dump'
 gem "redcarpet"
+gem 'rails_12factor'
 
 group :test do
   # We can't use transactional fixtures as the php app and the rails app need to see
