@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.1.5'
 gem 'mysql2'
+gem 'pg' # For Heroku deployment
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
