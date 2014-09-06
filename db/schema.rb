@@ -63,8 +63,7 @@ ActiveRecord::Schema.define(version: 20140905062045) do
   add_index "divisions", ["house"], name: "division_house", using: :btree
   add_index "divisions", ["number"], name: "division_number", using: :btree
 
-  create_table "electorates", id: false, force: true do |t|
-    t.integer "id",                                           null: false
+  create_table "electorates", force: true do |t|
     t.string  "name",      limit: 100,                        null: false
     t.boolean "main_name",                                    null: false
     t.date    "from_date",             default: '1000-01-01', null: false
@@ -73,7 +72,6 @@ ActiveRecord::Schema.define(version: 20140905062045) do
   end
 
   add_index "electorates", ["from_date"], name: "from_date", using: :btree
-  add_index "electorates", ["id", "name"], name: "cons_id", using: :btree
   add_index "electorates", ["name"], name: "name", using: :btree
   add_index "electorates", ["to_date"], name: "to_date", using: :btree
 
