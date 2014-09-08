@@ -1,0 +1,21 @@
+{
+  "name": "Public Whip",
+  "description": "Helping you find out if your MP represents you by analysing their votes in parliament for you.",
+  "keywords": [
+    "parliament",
+    "voting"
+  ],
+  "addons": [
+    "cleardb:ignite"
+  ],
+  "env": {
+    "LANG": "en_US.UTF-8",
+    "RAILS_ENV": "production",
+    "RACK_ENV": "production",
+    "Settings.xml_data_base_url": "http://data.openaustralia.org/",
+    "Settings.secret_key_base": {
+      "description": "secret_key_base for Rails and Devise.",
+      "generator": "secret"
+    }
+  }
+}
