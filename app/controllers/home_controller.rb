@@ -37,6 +37,9 @@ class HomeController < ApplicationController
     elsif !params[:query].blank?
       @mps = Member.find_by_search_query params[:query]
       @divisions = Division.find_by_search_query params[:query]
+    elsif params[:query].blank?
+      redirect_to 'home#index'
+      flash[:warning] = "Please enter a search term"
     end
   end
 end
